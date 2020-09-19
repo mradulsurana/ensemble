@@ -1,0 +1,48 @@
+body {
+  font-family: monospace;
+  padding: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+#compositions {
+  padding-top: 40px;
+  padding-left: 30px;
+  padding-right: 30px;
+
+}
+
+.card-info {
+  padding-top: 6px !important;
+}
+
+.composition-link {
+  color: #000;
+  padding: 15px;
+}
+
+.composition-card:hover {
+    box-shadow: 0px 2px 5px 1px rgb(146 146 146 / 50%);
+    transition: .15s;
+  }
+
+.composition-card {
+  transition: .15s;
+  min-height: 225px;
+}
+
+ul {
+  margin-bottom: 0px;
+}
+
+#composition-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1800px;
+  margin: auto;
+}
+
+#composition-cards > a {
+  text-decoration: none;
+}

@@ -123,6 +123,8 @@ const soundClips = document.querySelector('.sound-clips');
             const url = window.URL.createObjectURL(blob);
             //audio.src = url;
 
+            document.getElementById("waveform").childNodes[1].childNodes[0].childNodes[0].width = recordPercent * 100 + "%";
+            document.getElementById("waveform").childNodes[1].childNodes[0].childNodes[0].left = recordStartPercent * 100 + "%";
 
             var link = document.getElementById('download')
             link.href = url;

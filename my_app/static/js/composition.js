@@ -4,6 +4,7 @@ const stopBtn = document.getElementById("stopBtn");
 const playBtn = document.getElementById("pButton");
 const pauseBtn = document.getElementById("sButton");
 const dl = document.getElementById('download');
+const mButton = document.getElementById("mergeBtn");
 var waves = [];
 var recordPercent;
 var recordStartPercent;
@@ -12,7 +13,7 @@ var endTime;
 
 var wavesurfer = WaveSurfer.create({
     autoCenter: true,
-    barWidth: 10,
+    barWidth: 3,
     container: '#waveform',
     waveColor: 'green',
     progressColor: 'purple'
@@ -39,6 +40,25 @@ const soundClips = document.querySelector('.sound-clips');
             waves[x].pause();
         }
     }
+
+    function get(src) {
+        return fetch(src)
+          .then(function(response) {
+            return response.arrayBuffer()
+          })
+      
+      }
+      
+       
+      
+      function stopMix(duration, ...media) {
+        setTimeout(function(media) {
+          media.forEach(function(node) {
+            node.stop()
+          })
+        }, duration, media)
+      
+      }
 
     function createGraph(blob) {
         var wavesurfer = WaveSurfer.create({
@@ -152,3 +172,93 @@ const soundClips = document.querySelector('.sound-clips');
   } else {
      alert("Your web browser does not support recording audio for Ensemble");
   }
+
+  function merge() {
+    var sources = ["../static/audio/bensound-creativeminds.mp3", "../static/audio/bensound-ukulele.mp3"];    
+  var chunks = [];
+  var channels = [[0, 1], [1, 0]];
+  var audioContext = new AudioContext();
+  var player = new Audio();
+  var merger = audioContext.createChannelMerger(2);
+  var splitter = audioContext.createChannelSplitter(2);
+  var mixedAudio = audioContext.createMediaStreamDestination();
+  var duration = 5000;
+  var context;
+  var recorder;
+  var audioDownload;
+  
+  Promise.all(sources.map(get)).then(function(data) {
+      return Promise.all(data.map(function(buffer, index) {
+          return audioContext.decodeAudioData(buffer)
+            .then(function(bufferSource) {
+              audioContext.resume();
+              var channel = channels[index];
+              var source = audioContext.createBufferSource();
+              source.buffer = bufferSource;
+              source.connect(splitter);
+              splitter.connect(merger, channel[0], channel[1]);
+              return source
+            })
+        }))
+        .then(function(audionodes) {
+          audioContext.resume();
+          merger.connect(mixedAudio);
+          merger.connect(audioContext.destination);
+          recorder = new MediaRecorder(mixedAudio.stream);
+          recorder.start(0);
+          audionodes.forEach(function(node) {
+            node.start(0)
+  
+          });
+   
+          stopMix(duration, ...audionodes, recorder);
+          recorder.ondataavailable = function(event) {
+            chunks.push(event.data);
+          };
+  
+          recorder.onstop = function(event) {
+            
+            var blob = new Blob(chunks, {
+              "type": "audio/ogg; codecs=opus"
+            });
+  
+            audioDownload = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.download = "merged.wav";
+  
+  
+              var filename = "merged.wav";
+              var data = new FormData();
+              data.append('file', blob);
+              // request to post
+              var xhr=new XMLHttpRequest();
+              xhr.onload=function(e) {
+                  if(this.readyState === 4) {
+                      console.log("test");
+                      console.log("Server returned: ",e.target.responseText);
+                  }
+              };
+              //var f=new FormData();
+              //f.append("audio_data",blob, "filename.wav");
+              xhr.open("POST","upload",true);
+              xhr.send(data);
+            /** 
+            a.href = audioDownload;
+            a.innerHTML = a.download;
+            player.src = audioDownload;
+            document.body.appendChild(a);
+            document.body.appendChild(player);
+            */ 
+  
+          };
+        })
+    })
+  
+    .catch(function(e) {
+  
+      console.log(e)
+  
+    });
+  }
+  
+  mButton.addEventListener('click',merge);

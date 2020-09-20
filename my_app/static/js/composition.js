@@ -10,6 +10,7 @@ var recordPercent;
 var recordStartPercent;
 var startTime;
 var endTime;
+var recordedFilename;
 
 var wavesurfer = WaveSurfer.create({
     autoCenter: true,
@@ -46,18 +47,18 @@ const soundClips = document.querySelector('.sound-clips');
           .then(function(response) {
             return response.arrayBuffer()
           })
-      
+
       }
-      
-       
-      
+
+
+
       function stopMix(duration, ...media) {
         setTimeout(function(media) {
           media.forEach(function(node) {
             node.stop()
           })
         }, duration, media)
-      
+
       }
 
     function createGraph(blob) {
@@ -147,11 +148,13 @@ const soundClips = document.querySelector('.sound-clips');
             });
 */
 
+
+
             // request to post
             var xhr=new XMLHttpRequest();
             xhr.onload=function(e) {
                 if(this.readyState === 4) {
-                    console.log("test");
+                    recordedFilename = e.target.responseText;
                     console.log("Server returned: ",e.target.responseText);
                 }
             };
@@ -174,7 +177,7 @@ const soundClips = document.querySelector('.sound-clips');
   }
 
   function merge() {
-    var sources = ["../static/audio/bensound-creativeminds.mp3", "../static/audio/bensound-ukulele.mp3"];    
+    var sources = ["../static/audio/bensound-creativeminds.mp3", "../static/audio/bensound-ukulele.mp3"];
   var chunks = [];
   var channels = [[0, 1], [1, 0]];
   var audioContext = new AudioContext();
@@ -186,7 +189,7 @@ const soundClips = document.querySelector('.sound-clips');
   var context;
   var recorder;
   var audioDownload;
-  
+
   Promise.all(sources.map(get)).then(function(data) {
       return Promise.all(data.map(function(buffer, index) {
           return audioContext.decodeAudioData(buffer)
@@ -208,25 +211,25 @@ const soundClips = document.querySelector('.sound-clips');
           recorder.start(0);
           audionodes.forEach(function(node) {
             node.start(0)
-  
+
           });
-   
+
           stopMix(duration, ...audionodes, recorder);
           recorder.ondataavailable = function(event) {
             chunks.push(event.data);
           };
-  
+
           recorder.onstop = function(event) {
-            
+
             var blob = new Blob(chunks, {
               "type": "audio/ogg; codecs=opus"
             });
-  
+
             audioDownload = URL.createObjectURL(blob);
             var a = document.createElement("a");
             a.download = "merged.wav";
-  
-  
+
+
               var filename = "merged.wav";
               var data = new FormData();
               data.append('file', blob);
@@ -242,23 +245,23 @@ const soundClips = document.querySelector('.sound-clips');
               //f.append("audio_data",blob, "filename.wav");
               xhr.open("POST","upload",true);
               xhr.send(data);
-            /** 
+            /**
             a.href = audioDownload;
             a.innerHTML = a.download;
             player.src = audioDownload;
             document.body.appendChild(a);
             document.body.appendChild(player);
-            */ 
-  
+            */
+
           };
         })
     })
-  
+
     .catch(function(e) {
-  
+
       console.log(e)
-  
+
     });
   }
-  
+
   mButton.addEventListener('click',merge);

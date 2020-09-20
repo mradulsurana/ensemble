@@ -10,6 +10,7 @@ var recordPercent;
 var recordStartPercent;
 var startTime;
 var endTime;
+var sources = ["../static/audio/bensound-ukulele.mp3"];
 var recordedFilename;
 
 var wavesurfer = WaveSurfer.create({
@@ -177,7 +178,7 @@ const soundClips = document.querySelector('.sound-clips');
   }
 
   function merge() {
-    var sources = ["../static/audio/bensound-creativeminds.mp3", "../static/audio/bensound-ukulele.mp3"];
+  sources.push("../static/audio/"+recordedFilename);
   var chunks = [];
   var channels = [[0, 1], [1, 0]];
   var audioContext = new AudioContext();
@@ -185,7 +186,7 @@ const soundClips = document.querySelector('.sound-clips');
   var merger = audioContext.createChannelMerger(2);
   var splitter = audioContext.createChannelSplitter(2);
   var mixedAudio = audioContext.createMediaStreamDestination();
-  var duration = 5000;
+  var duration = wavesurfer.getDuration()*1000;
   var context;
   var recorder;
   var audioDownload;

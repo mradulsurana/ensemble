@@ -10,7 +10,7 @@ var recordPercent;
 var recordStartPercent;
 var startTime;
 var endTime;
-var sources = ["../static/audio/bensound-ukulele.mp3"];
+var sources = ["../static/audio/bensound-2.mp3"];
 var recordedFilename;
 
 var wavesurfer = WaveSurfer.create({
@@ -24,7 +24,7 @@ var wavesurfer = WaveSurfer.create({
 waves.push(wavesurfer);
 
 
-wavesurfer.load('../static/audio/bensound-ukulele.mp3');
+wavesurfer.load('../static/audio/bensound-2.mp3');
 
 const soundClips = document.querySelector('.sound-clips');
 

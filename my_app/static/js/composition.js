@@ -1,10 +1,54 @@
 
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
+const playBtn = document.getElementById("pButton");
+const pauseBtn = document.getElementById("sButton");
 const dl = document.getElementById('download');
+var waves = [];
+
+var wavesurfer = WaveSurfer.create({
+    autoCenter: true,
+    barWidth: 10,
+    container: '#waveform',
+    waveColor: 'green',
+    progressColor: 'purple'
+})
+
+waves.push(wavesurfer);
+
+
+wavesurfer.load('../static/audio/bensound-ukulele.mp3');
 
 const soundClips = document.querySelector('.sound-clips');
 
+    playBtn.onclick = function() {
+        var x;
+        for(x=0;x<waves.length;x++) {
+            waves[x].play();
+        }
+        
+    }
+
+    pauseBtn.onclick = function() {
+        var x;
+        for(x=0;x<waves.length;x++) {
+            waves[x].pause();
+        }
+    }
+
+    function createGraph(blob) {
+        var wavesurfer = WaveSurfer.create({
+            barWidth: 10,
+            container: '#waveform',
+            waveColor: 'orange',
+            progressColor: 'blue'
+        })
+        
+        wavesurfer.loadBlob(blob);
+        console.log(wavesurfer.getCurrentTime());
+        wavesurfer.seekTo(0);
+        waves.push(wavesurfer);
+    }
 
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
@@ -18,12 +62,16 @@ const soundClips = document.querySelector('.sound-clips');
           recordBtn.onclick = function() {
             mediaRec.start();
             console.log(mediaRec.state);
+            wavesurfer.play();
           }
 
           // record stop button is clicked
           stopBtn.onclick = function() {
             mediaRec.stop();
             console.log(mediaRec.state);
+            wavesurfer.pause();
+            wavesurfer.seekTo(0);
+            
           }
 
           // push to export
@@ -35,6 +83,7 @@ const soundClips = document.querySelector('.sound-clips');
           mediaRec.onstop = function(e) {
 
             const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+            createGraph(blob);
             chunks = []; // clear chunks for next recording
             const url = window.URL.createObjectURL(blob);
             //audio.src = url;

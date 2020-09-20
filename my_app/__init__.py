@@ -22,7 +22,8 @@ class Composition(db.Model):
 
 db.create_all()
 
-@app.route("/uploadDb", methods = ['POST'])
+
+@app.route("/uploadDb/<compname>/<creator>/<about>/<filepath>", methods = ['POST'])
 def uploadDb(compname, creator, about, filepath):
     if request.method == 'POST':
         composition = Composition(compname = compname, creator = creator, about = about, filepath = filepath)
@@ -30,7 +31,7 @@ def uploadDb(compname, creator, about, filepath):
         db.session.commit()
         return '<h1> Added New Composition!</h1>'
 
-@app.route("/getDb", methods = ['GET'])
+@app.route("/getDb/<compname>", methods = ['GET'])
 def getDb(compname):
     if request.method == 'GET':
         composition = Composition.query.filter_by(compname = compname).first()

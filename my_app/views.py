@@ -55,5 +55,5 @@ def upload():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             #file.save(os.path.join('../static/audio/', filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+            return filename
     return 'unkown error occured'

@@ -5,24 +5,72 @@
     <title>Ensemble</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../static/css/composition.css">
 
-    <!-- CSS only -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- CSS only
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">-->
 
-  <!-- JS, Popper.js, and jQuery -->
+  <!-- JS, Popper.js, and jQuery --><!--
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
+-->
 
   </head>
   <body>
     <h1 class="text-center">Ensemble</h1>
+<!--
+    <button type="button" class="btn btn-primary control-button record">Record</button>
+    <button type="button" class="btn btn-primary control-button stop-record">Stop Recording</button>
+-->
+
+    <input type="file" accept="audio/*" capture>
+        <audio id='record' controls></audio>
+    <button id="recordBtn">Start Recording</button>
+    <br>
+    <button id="stopBtn">Stop Recording</button>
+    <br>
+    <button id='pButton'>Play Audio</button>
+    <br>
+    <button id='sButton'>Pause Audio</button>
+    <br>
+    <a id="download">Download</a>
+    <input id='vControl' type="range" min="0" max="1" step="0.01" value="1" class="volume">
+    <audio id='myaudio' src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3%22%3E</audio>
+    <script src='../static/bensound-ukulele.mp3'></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js%22%3E</script>
+
+<div class="sound-clips"></div>
+
+
+
+
+
+
+
+
 
     <div id="controls">
-      <button type="button" class="btn btn-primary" id="play-pause">Play Song</button>
-      <button type="button" class="btn btn-primary" id="edit-comp">Edit Composition</button>
+
+      <button type="button" class="btn btn-primary control-button" id="play-pause">Play Song</button>
+      <button type="button" class="btn btn-primary control-button" id="edit-comp">Edit Composition</button>
+      <button type="button" class="btn btn-primary control-button" id="record" styles="display: none;">Record</button>
+      <p style="display: inline-block">
+        <a class="btn btn-primary control-button" data-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHalp">Help</a>
+      </p>
+      <div class="collapse" id="collapseHelp">
+      <div class="card card-body">
+        <span>Clikc the play button to listen to this composition</span>
+        <ul>
+          <li>You can play or pause or click the screen to </i>
+
+        </ul>
+        <span>You can click the help button again to hide this box</span>
+      </div>
+      </div>
+
+
+
     </div>
 
     <div id="music">
@@ -33,6 +81,6 @@
   </body>
   <footer>
     <script src="https://unpkg.com/wavesurfer.js"></script>
-    <script src="composition.js"></script>
+    <script src="../static/js/composition.js"></script>
   </footer>
 </html>

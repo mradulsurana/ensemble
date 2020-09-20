@@ -46,10 +46,3 @@ ul {
 #composition-cards > a {
   text-decoration: none;
 }
-
-#controls {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 20px;
-}

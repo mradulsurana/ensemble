@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER = '../static/audio'
+UPLOAD_FOLDER = 'my_app/static/audio/'
 ALLOWED_EXTENSIONS = {'wav','mp3'}
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ class Composition(db.Model):
     creator = db.Column(db.String(20))
     about = db.Column(db.String(200))
     filepath = db.Column(db.String(200))
-    
+
 db.create_all()
 
 @app.route("/uploadDb", methods =['GET', 'POST'])

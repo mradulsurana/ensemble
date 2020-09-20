@@ -1,11 +1,23 @@
+import os
 from my_app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash, url_for, session, send_from_directory
+from werkzeug.utils import secure_filename
+
+import uuid
+
 import requests
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+#@app.route('/favicon.ico')
+#def favicon():
+#    return send_from_directory(os.path.join(app.root_path, 'static'),
+#                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 @app.route("/")
 def index():
@@ -36,8 +48,12 @@ def upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+        if file:
+            filename = str(uuid.uuid4().hex) + ".wav"
+            #filename = secure_filename(file.filename)
+            print(os.getcwd());
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            #file.save(os.path.join('../static/audio/', filename))
             return redirect(url_for('uploaded_file', filename=filename))
-    return ''
+    return 'unkown error occured'

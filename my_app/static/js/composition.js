@@ -5,6 +5,10 @@ const playBtn = document.getElementById("pButton");
 const pauseBtn = document.getElementById("sButton");
 const dl = document.getElementById('download');
 var waves = [];
+var recordPercent;
+var recordStartPercent;
+var startTime;
+var endTime;
 
 var wavesurfer = WaveSurfer.create({
     autoCenter: true,
@@ -26,7 +30,7 @@ const soundClips = document.querySelector('.sound-clips');
         for(x=0;x<waves.length;x++) {
             waves[x].play();
         }
-        
+
     }
 
     pauseBtn.onclick = function() {
@@ -43,10 +47,17 @@ const soundClips = document.querySelector('.sound-clips');
             waveColor: 'orange',
             progressColor: 'blue'
         })
-        
+
         wavesurfer.loadBlob(blob);
         console.log(wavesurfer.getCurrentTime());
         wavesurfer.seekTo(0);
+        recordPercent = (endTime-startTime)/waves[0].getDuration();
+        recordStartPercent = startTime/waves[0].getDuration();
+        console.log(recordPercent);
+        console.log(recordStartPercent);
+        console.log("start");
+        console.log(waves[0].getDuration());
+        console.log(wavesurfer.getDuration());
         waves.push(wavesurfer);
     }
 
@@ -63,6 +74,7 @@ const soundClips = document.querySelector('.sound-clips');
             mediaRec.start();
             console.log(mediaRec.state);
             wavesurfer.play();
+            startTime = wavesurfer.getCurrentTime();
           }
 
           // record stop button is clicked
@@ -70,8 +82,9 @@ const soundClips = document.querySelector('.sound-clips');
             mediaRec.stop();
             console.log(mediaRec.state);
             wavesurfer.pause();
-            wavesurfer.seekTo(0);
-            
+            endTime = wavesurfer.getCurrentTime();
+            wavesurfer.seekTo(startTime/wavesurfer.getDuration());
+
           }
 
           // push to export

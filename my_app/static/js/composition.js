@@ -30,7 +30,7 @@ const soundClips = document.querySelector('.sound-clips');
         for(x=0;x<waves.length;x++) {
             waves[x].play();
         }
-        
+
     }
 
     pauseBtn.onclick = function() {
@@ -47,7 +47,7 @@ const soundClips = document.querySelector('.sound-clips');
             waveColor: 'orange',
             progressColor: 'blue'
         })
-        
+
         wavesurfer.loadBlob(blob);
         console.log(wavesurfer.getCurrentTime());
         wavesurfer.seekTo(0);
@@ -74,7 +74,7 @@ const soundClips = document.querySelector('.sound-clips');
             mediaRec.start();
             console.log(mediaRec.state);
             wavesurfer.play();
-            startTime = wavesurfer.getCurrentTime(); 
+            startTime = wavesurfer.getCurrentTime();
           }
 
           // record stop button is clicked
@@ -84,7 +84,7 @@ const soundClips = document.querySelector('.sound-clips');
             wavesurfer.pause();
             endTime = wavesurfer.getCurrentTime();
             wavesurfer.seekTo(startTime/wavesurfer.getDuration());
-            
+
           }
 
           // push to export
